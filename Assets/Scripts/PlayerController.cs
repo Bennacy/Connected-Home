@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.Video;
 
 public class PlayerController : MonoBehaviour
@@ -11,17 +13,22 @@ public class PlayerController : MonoBehaviour
     public Transform cameraHolder;
     private Vector2 moveDirection;
     public Camera cam;
-    public Vector2 cameraVerticalBounds;
+    public Vector2 cameraVerticalBounds = new Vector2(80, -80);
     private Vector2 cameraRotate;
     private float currCameraAngle;
-    public ILightDivision currentDivision;
     [Space(10)]
 
-    private Rigidbody rb;
+    [Header("Lights")]
+    [SerializeField] private GameObject[] MainLights;
+    [SerializeField] private GameObject[] SecondaryLights;
+    [SerializeField] private LightZone currentDivision;
+    private bool changingSecondary = false;
+    [Space(10)]
 
-    public float camSensitivity;
+    [Header("Movement")]
     public float walkSpeed;
-    private float moveSpeed;
+    public float moveSpeed;
+    private Rigidbody rb;
     
     void Start()
     {
@@ -33,16 +40,20 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if(currentDivision != null){
-            if(Input.GetKeyDown(KeyCode.L)){
-                currentDivision.UpdateLightIntensity(1);
-            }
-            if(Input.GetKeyDown(KeyCode.P)){
-                currentDivision.UpdateLightColor(1);
-            }
-            if(Input.GetKeyDown(KeyCode.O)){
-                currentDivision.ToggleLights();
-            }
+        if(Input.GetKeyDown(KeyCode.Alpha1) && currentDivision != null){
+            currentDivision.ToggleLights(changingSecondary);
+            changingSecondary = false;
+        }
+        if(Input.GetKeyDown(KeyCode.Alpha2) && currentDivision != null){
+            currentDivision.UpdateLightColor(changingSecondary);
+            changingSecondary = false;
+        }
+        if(Input.GetKeyDown(KeyCode.Alpha3) && currentDivision != null){
+            currentDivision.UpdateLightIntensity(changingSecondary);
+            changingSecondary = false;
+        }
+        if(Input.GetKeyDown(KeyCode.F) && currentDivision != null){
+            changingSecondary = true;
         }
     }
 
@@ -85,14 +96,14 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        ILightDivision lightDivision = other.GetComponent<ILightDivision>();
-        if(lightDivision){
-            currentDivision = lightDivision;
+        LightZone lightZone = other.GetComponent<LightZone>();
+        if(lightZone){
+            currentDivision = lightZone;
         }
     }
     private void OnTriggerExit(Collider other) {
-        ILightDivision lightDivision = other.GetComponent<ILightDivision>();
-        if(currentDivision == lightDivision){
+        LightZone lightZone = other.GetComponent<LightZone>();
+        if(currentDivision == lightZone){
             currentDivision = null;
         }
     }
