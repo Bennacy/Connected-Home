@@ -67,7 +67,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 200
-  field of view: 60
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCam: {fileID: 5057215093343159907}
   characterCam: {fileID: 5057215093343159907}
-  FOV: 60
+  FOV: 80
   sens: 1
 --- !u!1 &6430464662109381228
 GameObject:
