@@ -10,7 +10,7 @@ public class WebSocketClient : MonoBehaviour
         // Connect to WebSocket server
         ws = new WebSocket("ws://10.72.137.113");  // Use your ESP32's IP here
 
-        // Event handlers for WebSocket events
+        // Add event handlers to log connection events
         ws.OnOpen += (sender, e) =>
         {
             Debug.Log("WebSocket connection opened.");
@@ -31,8 +31,20 @@ public class WebSocketClient : MonoBehaviour
             Debug.Log("WebSocket connection closed.");
         };
 
-        // Connect to the WebSocket server
+        // Log before attempting to connect
+        Debug.Log("Attempting to connect to WebSocket server...");
+
+        // Attempt to connect to the WebSocket server
         ws.Connect();
+    }
+
+    void Update()
+    {
+        // Send a message if the WebSocket is open
+        if (ws != null && ws.IsOpen)
+        {
+            // ws.Send("Hello from Unity!");
+        }
     }
 
     void OnApplicationQuit()
@@ -41,15 +53,6 @@ public class WebSocketClient : MonoBehaviour
         if (ws != null && ws.IsOpen)
         {
             ws.Close();
-        }
-    }
-
-    void Update()
-    {
-        // Send a message every frame or based on events
-        if (ws != null && ws.IsOpen)
-        {
-            ws.Send("Hello from Unity!");
         }
     }
 }

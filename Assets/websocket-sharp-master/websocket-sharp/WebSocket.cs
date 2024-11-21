@@ -513,7 +513,7 @@ namespace WebSocketSharp
 
     public bool IsOpen {
       get {
-        return true;
+        return _readyState == WebSocketState.Open;
       }
     }
 
