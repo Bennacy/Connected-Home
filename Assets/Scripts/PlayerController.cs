@@ -44,16 +44,16 @@ public class PlayerController : MonoBehaviour
             currentDivision.ToggleLights(changingSecondary);
             changingSecondary = false;
         }
-        if(Input.GetKeyDown(KeyCode.Alpha2) && currentDivision != null){
-            currentDivision.UpdateLightColor(changingSecondary);
-            changingSecondary = false;
-        }
-        if(Input.GetKeyDown(KeyCode.Alpha3) && currentDivision != null){
-            currentDivision.UpdateLightIntensity(changingSecondary);
-            changingSecondary = false;
-        }
+        // if(Input.GetKeyDown(KeyCode.Alpha2) && currentDivision != null){
+        //     currentDivision.UpdateLightColor(changingSecondary);
+        //     changingSecondary = false;
+        // }
+        // if(Input.GetKeyDown(KeyCode.Alpha3) && currentDivision != null){
+        //     currentDivision.UpdateLightIntensity(changingSecondary);
+        //     changingSecondary = false;
+        // }
         if(Input.GetKeyDown(KeyCode.F) && currentDivision != null){
-            changingSecondary = true;
+            changingSecondary = !changingSecondary;
         }
     }
 

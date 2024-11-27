@@ -15,7 +15,7 @@ public class LightZone : MonoBehaviour
     private int PrimaryIntensityIndex;
     [Space(10)]
     
-    [Header("Primary Lights")]
+    [Header("Secondary Lights")]
     public Light[] SecondaryLights;
     public Color[] SecondaryLightColors;
     private int SecondaryColorIndex;

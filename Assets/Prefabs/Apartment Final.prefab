@@ -10143,11 +10143,11 @@ MonoBehaviour:
   - {fileID: 8983697470806780480}
   - {fileID: 1001139403512823410}
   - {fileID: 7325189062654035058}
-  - {fileID: 71340842349221012}
-  - {fileID: 1427986442632016905}
   PrimaryLightColors: []
   PrimaryLightIntensities: []
-  SecondaryLights: []
+  SecondaryLights:
+  - {fileID: 71340842349221012}
+  - {fileID: 1427986442632016905}
   SecondaryLightColors: []
   SecondaryLightIntensities: []
 --- !u!1 &2429644913227620034
@@ -14876,12 +14876,12 @@ MonoBehaviour:
   PrimaryLights:
   - {fileID: 1539340716688320541}
   - {fileID: 6329708525357935515}
+  PrimaryLightColors: []
+  PrimaryLightIntensities: []
+  SecondaryLights:
   - {fileID: 9080429176714496169}
   - {fileID: 8635568665267385009}
   - {fileID: 4792718307490961031}
-  PrimaryLightColors: []
-  PrimaryLightIntensities: []
-  SecondaryLights: []
   SecondaryLightColors: []
   SecondaryLightIntensities: []
 --- !u!1 &3628561959926129215
@@ -35237,10 +35237,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PrimaryLights:
   - {fileID: 5827966726857828098}
-  - {fileID: 7051052808128789138}
   PrimaryLightColors: []
   PrimaryLightIntensities: []
-  SecondaryLights: []
+  SecondaryLights:
+  - {fileID: 7051052808128789138}
   SecondaryLightColors: []
   SecondaryLightIntensities: []
 --- !u!1 &8313721063674607522

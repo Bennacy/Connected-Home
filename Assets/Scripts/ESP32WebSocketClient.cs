@@ -1,58 +1,52 @@
-using UnityEngine;
-using WebSocketSharp;
+// using UnityEngine;
+// using NativeWebSocket;
 
-public class WebSocketClient : MonoBehaviour
-{
-    private WebSocket ws;
+// public class ESP32WebSocketClient : MonoBehaviour
+// {
+//     private WebSocket websocket;
 
-    void Start()
-    {
-        // Connect to WebSocket server
-        ws = new WebSocket("ws://10.72.137.113");  // Use your ESP32's IP here
+//     async void Start()
+//     {
+//         // Start WebSocket server
+//         websocket = new WebSocket("ws://192.168.1.100:8080"); // Replace with Arduino's WebSocket IP and port
 
-        // Add event handlers to log connection events
-        ws.OnOpen += (sender, e) =>
-        {
-            Debug.Log("WebSocket connection opened.");
-        };
+//         websocket.OnOpen += () =>
+//         {
+//             Debug.Log("Connection open!");
+//         };
 
-        ws.OnMessage += (sender, e) =>
-        {
-            Debug.Log("Message from server: " + e.Data);
-        };
+//         websocket.OnError += (e) =>
+//         {
+//             Debug.Log($"Error: {e}");
+//         };
 
-        ws.OnError += (sender, e) =>
-        {
-            Debug.LogError("WebSocket Error: " + e.Message);
-        };
+//         websocket.OnClose += (e) =>
+//         {
+//             Debug.Log("Connection closed!");
+//         };
 
-        ws.OnClose += (sender, e) =>
-        {
-            Debug.Log("WebSocket connection closed.");
-        };
+//         websocket.OnMessage += (bytes) =>
+//         {
+//             // Decode message from Arduino
+//             string message = System.Text.Encoding.UTF8.GetString(bytes);
+//             Debug.Log($"Message from Arduino: {message}");
+//         };
 
-        // Log before attempting to connect
-        Debug.Log("Attempting to connect to WebSocket server...");
+//         await websocket.Connect();
+//     }
 
-        // Attempt to connect to the WebSocket server
-        ws.Connect();
-    }
+//     void Update()
+//     {
+//         #if !UNITY_WEBGL || UNITY_EDITOR
+//         websocket?.DispatchMessageQueue();
+//         #endif
+//     }
 
-    void Update()
-    {
-        // Send a message if the WebSocket is open
-        if (ws != null && ws.IsOpen)
-        {
-            // ws.Send("Hello from Unity!");
-        }
-    }
-
-    void OnApplicationQuit()
-    {
-        // Close the WebSocket connection when the application quits
-        if (ws != null && ws.IsOpen)
-        {
-            ws.Close();
-        }
-    }
-}
+//     async void OnApplicationQuit()
+//     {
+//         if (websocket != null)
+//         {
+//             await websocket.Close();
+//         }
+//     }
+// }
