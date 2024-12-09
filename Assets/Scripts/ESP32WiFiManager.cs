@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 public class ESP32WiFiManager : MonoBehaviour
 {
     public Accelerations currentAccelerometer;
-    private string esp32Url = "http://10.72.165.219"; // Replace with your ESP32 IP
+    private string esp32Url = "http://10.36.248.233"; // Replace with your ESP32 IP
     // private string esp32Url = "http://192.168.68.117"; // Replace with your ESP32 IP
 
     // public Velocities averageVelocities;

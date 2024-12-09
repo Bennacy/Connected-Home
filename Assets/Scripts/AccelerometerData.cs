@@ -42,20 +42,20 @@ public class AccelerometerData : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.UpArrow)){
-            StartCoroutine(WriteTrainCSV("^"));
+            StartCoroutine(WriteTrainCSV("UP"));
         }
         if(Input.GetKeyDown(KeyCode.DownArrow)){
-            StartCoroutine(WriteTrainCSV("V"));
+            StartCoroutine(WriteTrainCSV("DOWN"));
         }
         if(Input.GetKeyDown(KeyCode.LeftArrow)){
-            StartCoroutine(WriteTrainCSV("<"));
+            StartCoroutine(WriteTrainCSV("LEFT"));
         }
         if(Input.GetKeyDown(KeyCode.RightArrow)){
-            StartCoroutine(WriteTrainCSV(">"));
+            StartCoroutine(WriteTrainCSV("RIGHT"));
         }
 
         if(Input.GetKeyDown(KeyCode.N)){
-            StartCoroutine(WriteTrainCSV("-"));
+            StartCoroutine(WriteTrainCSV("NONE"));
         }
 
         if(Input.GetKeyDown(KeyCode.Space)){
