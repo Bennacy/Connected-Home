@@ -91,7 +91,7 @@ public class ESP32Constant : MonoBehaviour
             float value3 = float.Parse(parts[2]);
 
             accelerometerData.NewData(new Accelerations(value1, value2, value3));
-            SendData($"{value1}, {value2}, {value3}");
+            // SendData($"{value1}, {value2}, {value3}");
             // Debug.Log($"Received values: {value1}, {value2}, {value3}");
         }
         else
