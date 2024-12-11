@@ -6,8 +6,7 @@ using UnityEngine.Networking;
 
 public class ESP32WiFiManager : MonoBehaviour
 {
-    public Accelerations currentAccelerometer;
-    private string esp32Url = "http://10.36.248.233"; // Replace with your ESP32 IP
+    private string esp32Url = "http://10.36.226.237"; // Replace with your ESP32 IP
     // private string esp32Url = "http://192.168.68.117"; // Replace with your ESP32 IP
 
     // public Velocities averageVelocities;
@@ -24,7 +23,6 @@ public class ESP32WiFiManager : MonoBehaviour
         // Test the connection by sending a GET request
         StartCoroutine(SendGetRequest());
         accelerometerData = GetComponent<AccelerometerData>();
-        currentAccelerometer = new Accelerations();
         // averageVelocities = new Velocities();
         requestCooldown = 0;
     }
@@ -75,7 +73,6 @@ public class ESP32WiFiManager : MonoBehaviour
                 float accelerometerX = float.Parse(separatedString[0]);
                 float accelerometerY = float.Parse(separatedString[1]);
                 float accelerometerZ = float.Parse(separatedString[2]);
-                currentAccelerometer.NewValues(accelerometerX, accelerometerY, accelerometerZ);
                 accelerometerData.NewData(new Accelerations(accelerometerX, accelerometerY, accelerometerZ));
             }
             // Debug.Log("POST Response: " + request.downloadHandler.text);

@@ -63,10 +63,10 @@ public class AccelerometerData : MonoBehaviour
         }
 
         if(Input.GetKeyDown(KeyCode.R)){
-            ResetCSV(predictFileName);
+            ResetCSV(predictFileName); // Reset prediction file
         }
         if(Input.GetKeyDown(KeyCode.T)){
-            ResetCSV(trainFileName);
+            ResetCSV(trainFileName); // Reset training file
         }
     }
 
