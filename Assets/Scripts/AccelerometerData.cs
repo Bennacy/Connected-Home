@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.Networking;
 using System;
 
 
@@ -26,6 +27,7 @@ public class Accelerations{
 
 public class AccelerometerData : MonoBehaviour
 {
+    public string flaskIP = "http://127.0.0.1:5000/";
     public Accelerations currentAccelerometer;
     public List<Accelerations> accelerationsList;
     public int maxListSize = 15;
@@ -126,9 +128,26 @@ public class AccelerometerData : MonoBehaviour
                 else
                     data +=  $"{accelerationsList[i].X}, {accelerationsList[i].Y}, {accelerationsList[i].Z}";
             }
+            
             tw.WriteLine(data);
             tw.Close();
-            print("Unknown data saved");
+            StartCoroutine(FlaskPost(data));
+            // print("Unknown data saved");
+        }
+    }
+
+    public IEnumerator FlaskPost(string data){
+        string features = "{\"features\":[";
+        features += data;
+        features += "]}";
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(flaskIP+"predictLogisticRegression", features, "application/json")){
+            yield return webRequest.SendWebRequest();
+            if(webRequest.result == UnityWebRequest.Result.Success){
+                print(webRequest.downloadHandler.text);
+            }
+            if(webRequest.result == UnityWebRequest.Result.ConnectionError){
+                print("Error");
+            }
         }
     }
 }
