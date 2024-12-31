@@ -8,12 +8,15 @@ import numpy as np
 import os
 
 # Get the directory of the current script
-current_dir = os.getcwd()
+current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_folder = os.path.abspath(os.path.join(current_dir, os.pardir))
 
 # Set the model path dynamically
 treeModelPath = os.path.join(current_dir, 'treeModel.pkcls')
 logisticRegressionPath = os.path.join(parent_folder, 'Logistic_Regression_Model.pkcls')
+print(current_dir)
+print(parent_folder)
+print(logisticRegressionPath)
 
 app = Flask(__name__)
 
