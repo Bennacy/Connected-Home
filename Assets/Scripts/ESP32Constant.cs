@@ -6,7 +6,7 @@ public class ESP32Constant : MonoBehaviour
 {
     TcpClient client;
     NetworkStream stream;
-    string ipAddress = "192.168.68.117"; // Replace with your ESP32's IP address
+    string ipAddress = "10.36.226.24"; // Replace with your ESP32's IP address
     int port = 80;
     float timer = 0;
     private AccelerometerData accelerometerData;

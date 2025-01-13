@@ -34,15 +34,34 @@ public class AccelerometerData : MonoBehaviour
     string trainFileName = "";
     string predictFileName = "";
 
+    public float flaskInterval = 0.5f;
+    private float flaskTimer = 0;
+    public bool canPost = true;
+    public float postInterval = 2;
+    private float postCooldown;
+    public string lastResponse = "";
+    public int responseCount = 0;
+
     void Start()
     {
         accelerationsList = new List<Accelerations>();
         trainFileName = Application.dataPath + "/train.csv";
         predictFileName = Application.dataPath + "/predict.csv";
+        postCooldown = postInterval;
+        flaskInterval = flaskTimer;
     }
 
     void Update()
     {
+        flaskTimer += Time.deltaTime;
+        postCooldown += Time.deltaTime;
+        
+        if(flaskTimer >= flaskInterval && postCooldown >= postInterval){
+            canPost = true;
+            flaskTimer = 0;
+            StartCoroutine(FlaskPost());
+        }
+        
         if(Input.GetKeyDown(KeyCode.UpArrow)){
             StartCoroutine(WriteTrainCSV("UP"));
         }
@@ -131,19 +150,41 @@ public class AccelerometerData : MonoBehaviour
             
             tw.WriteLine(data);
             tw.Close();
-            StartCoroutine(FlaskPost(data));
+            StartCoroutine(FlaskPost());
             // print("Unknown data saved");
         }
     }
 
-    public IEnumerator FlaskPost(string data){
+    public IEnumerator FlaskPost(){
+        string data = "";
+        for(int i = 0; i < accelerationsList.Count; i++){
+            if(i < accelerationsList.Count-1)
+                data +=  $"{accelerationsList[i].X}, {accelerationsList[i].Y}, {accelerationsList[i].Z}, ";
+            else
+                data +=  $"{accelerationsList[i].X}, {accelerationsList[i].Y}, {accelerationsList[i].Z}";
+        }
+
         string features = "{\"features\":[";
         features += data;
         features += "]}";
         using (UnityWebRequest webRequest = UnityWebRequest.Post(flaskIP+"predictLogisticRegression", features, "application/json")){
             yield return webRequest.SendWebRequest();
             if(webRequest.result == UnityWebRequest.Result.Success){
-                print(webRequest.downloadHandler.text);
+                string response = webRequest.downloadHandler.text;
+                if(response == lastResponse){
+                    responseCount++;
+                }else{
+                    responseCount = 0;
+                }
+                lastResponse = response;
+
+                if(!response.Contains("NONE")){
+                    print(webRequest.downloadHandler.text);
+                    canPost = false;
+                    postCooldown = 0;
+                    responseCount = 0;
+                    // lastResponse = "";
+                }
             }
             if(webRequest.result == UnityWebRequest.Result.ConnectionError){
                 print("Error");

@@ -3,10 +3,10 @@
 #include <Adafruit_ADXL345_U.h>
 
 
-// const char* ssid = "Visitors";
-// const char* password = "";
-const char* ssid = "Cgates-6428";
-const char* password = "Cgates-54AF6428";
+const char* ssid = "Visitors";
+const char* password = "";
+// const char* ssid = "Cgates-6428";
+// const char* password = "Cgates-54AF6428";
 
 Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 WiFiServer server(80);
