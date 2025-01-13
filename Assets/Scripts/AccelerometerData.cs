@@ -48,7 +48,7 @@ public class AccelerometerData : MonoBehaviour
         trainFileName = Application.dataPath + "/train.csv";
         predictFileName = Application.dataPath + "/predict.csv";
         postCooldown = postInterval;
-        flaskInterval = flaskTimer;
+        flaskTimer = flaskInterval;
     }
 
     void Update()
@@ -88,6 +88,18 @@ public class AccelerometerData : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.T)){
             ResetCSV(trainFileName); // Reset training file
+        }
+    }
+
+    private void ReceiveCommand(string command){
+        if(command.Contains("UP")){
+            print("UP");
+        }else if(command.Contains("DOWN")){
+            print("DOWN");
+        }else if(command.Contains("LEFT")){
+            print("LEFT");
+        }else if(command.Contains("RIGHT")){
+            print("RIGHT");
         }
     }
 
@@ -171,6 +183,7 @@ public class AccelerometerData : MonoBehaviour
             yield return webRequest.SendWebRequest();
             if(webRequest.result == UnityWebRequest.Result.Success){
                 string response = webRequest.downloadHandler.text;
+                
                 if(response == lastResponse){
                     responseCount++;
                 }else{
@@ -179,7 +192,8 @@ public class AccelerometerData : MonoBehaviour
                 lastResponse = response;
 
                 if(!response.Contains("NONE")){
-                    print(webRequest.downloadHandler.text);
+                    ReceiveCommand(response);
+                    // print(webRequest.downloadHandler.text);
                     canPost = false;
                     postCooldown = 0;
                     responseCount = 0;
