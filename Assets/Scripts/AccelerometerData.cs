@@ -33,6 +33,7 @@ public class AccelerometerData : MonoBehaviour
     public int maxListSize = 15;
     string trainFileName = "";
     string predictFileName = "";
+    private PlayerController playerController;
 
     public float flaskInterval = 0.5f;
     private float flaskTimer = 0;
@@ -44,6 +45,7 @@ public class AccelerometerData : MonoBehaviour
 
     void Start()
     {
+        playerController = GetComponent<PlayerController>();
         accelerationsList = new List<Accelerations>();
         trainFileName = Application.dataPath + "/train.csv";
         predictFileName = Application.dataPath + "/predict.csv";
@@ -94,7 +96,9 @@ public class AccelerometerData : MonoBehaviour
     private void ReceiveCommand(string command){
         if(command.Contains("UP")){
             print("UP");
+            playerController.ToggleLights(true);
         }else if(command.Contains("DOWN")){
+            playerController.ToggleLights(false);
             print("DOWN");
         }else if(command.Contains("LEFT")){
             print("LEFT");

@@ -3,8 +3,14 @@
 #include <Adafruit_ADXL345_U.h>
 
 
-const char* ssid = "Visitors";
-const char* password = "";
+// const char* ssid = "Visitors";
+// const char* password = "";
+const char* ssid = "Home_Net DECO";
+const char* password = "2018_aoACASOzonnet1966#";
+// const char* ssid = "NOS_D0BE79";
+// const char* password = "6A9E44141F";
+// const char* ssid = "Benny";
+// const char* password = "Cambridge";
 // const char* ssid = "Cgates-6428";
 // const char* password = "Cgates-54AF6428";
 

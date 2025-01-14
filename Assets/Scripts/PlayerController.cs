@@ -67,6 +67,15 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(direction * walkSpeed * 10, ForceMode.Force);
     }
 
+    public void ToggleLights(bool on){
+        if(on){
+            currentDivision.EnableLights();
+        }else{
+            currentDivision.DisableLights();
+        }
+    }
+
+
     void LateUpdate()
     {
         RotateCamera();

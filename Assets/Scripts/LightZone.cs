@@ -66,4 +66,16 @@ public class LightZone : MonoBehaviour
             }
         }
     }
+
+    public void EnableLights(){
+        for(int i = 0; i < PrimaryLights.Length; i++){
+            PrimaryLights[i].gameObject.SetActive(true);
+        }
+    }
+
+    public void DisableLights(){
+        for(int i = 0; i < PrimaryLights.Length; i++){
+            PrimaryLights[i].gameObject.SetActive(false);
+        }
+    }
 }
