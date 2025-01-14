@@ -74,6 +74,10 @@ public class PlayerController : MonoBehaviour
             currentDivision.DisableLights();
         }
     }
+     
+    public void CycleLightColor(int direction){
+        currentDivision.UpdateLightColor(false, direction);
+    }
 
 
     void LateUpdate()

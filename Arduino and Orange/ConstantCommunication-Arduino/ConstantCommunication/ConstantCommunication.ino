@@ -25,7 +25,14 @@ void setup() {
       Serial.println("Ooops, no ADXL345 detected ... Check your wiring!");
     accel.setRange(ADXL345_RANGE_16_G);
 
-    
+
+    IPAddress local_IP(192, 168, 68, 118);
+    IPAddress gateway(192, 168, 68, 118);
+    // IPAddress subnet(255, 255, 255, 0);
+    // IPAddress primaryDNS(208, 67, 222, 222);
+    // IPAddress secondaryDNS(208, 67, 220, 220);
+
+    WiFi.config(local_IP, gateway);
     WiFi.setMinSecurity(WIFI_AUTH_OPEN);
     WiFi.begin(ssid, password);
 

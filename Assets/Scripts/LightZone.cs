@@ -23,7 +23,7 @@ public class LightZone : MonoBehaviour
     private int SecondaryIntensityIndex;
     
 
-    public void UpdateLightColor(bool secondary){
+    public void UpdateLightColor(bool secondary, int direction){
         if(secondary && SecondaryLightColors.Length > 0){
             int newIndex = SecondaryColorIndex + 1;
             SecondaryColorIndex = newIndex >= SecondaryLightColors.Length ? 0 : newIndex >= 0 ? newIndex : SecondaryLightColors.Length-1;
@@ -32,7 +32,7 @@ public class LightZone : MonoBehaviour
                 SecondaryLights[i].color = SecondaryLightColors[SecondaryIntensityIndex];
             }
         }else if(!secondary){
-            int newIndex = PrimaryColorIndex + 1;
+            int newIndex = PrimaryColorIndex + direction;
             PrimaryColorIndex = newIndex >= PrimaryLightColors.Length ? 0 : newIndex >= 0 ? newIndex : PrimaryLightColors.Length-1;
             print(PrimaryLightColors[PrimaryColorIndex]);
             for(int i = 0; i < PrimaryLights.Length; i++){

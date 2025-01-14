@@ -40,8 +40,6 @@ public class AccelerometerData : MonoBehaviour
     public bool canPost = true;
     public float postInterval = 2;
     private float postCooldown;
-    public string lastResponse = "";
-    public int responseCount = 0;
 
     void Start()
     {
@@ -95,15 +93,13 @@ public class AccelerometerData : MonoBehaviour
 
     private void ReceiveCommand(string command){
         if(command.Contains("UP")){
-            print("UP");
             playerController.ToggleLights(true);
         }else if(command.Contains("DOWN")){
             playerController.ToggleLights(false);
-            print("DOWN");
         }else if(command.Contains("LEFT")){
-            print("LEFT");
+            playerController.CycleLightColor(-1);
         }else if(command.Contains("RIGHT")){
-            print("RIGHT");
+            playerController.CycleLightColor(1);
         }
     }
 
@@ -167,7 +163,6 @@ public class AccelerometerData : MonoBehaviour
             tw.WriteLine(data);
             tw.Close();
             StartCoroutine(FlaskPost());
-            // print("Unknown data saved");
         }
     }
 
@@ -187,20 +182,11 @@ public class AccelerometerData : MonoBehaviour
             yield return webRequest.SendWebRequest();
             if(webRequest.result == UnityWebRequest.Result.Success){
                 string response = webRequest.downloadHandler.text;
-                
-                if(response == lastResponse){
-                    responseCount++;
-                }else{
-                    responseCount = 0;
-                }
-                lastResponse = response;
 
-                if(!response.Contains("NONE")){
+                if(!response.Contains("NONE") && ValidTest()){
                     ReceiveCommand(response);
-                    // print(webRequest.downloadHandler.text);
                     canPost = false;
                     postCooldown = 0;
-                    responseCount = 0;
                     // lastResponse = "";
                 }
             }
@@ -208,5 +194,20 @@ public class AccelerometerData : MonoBehaviour
                 print("Error");
             }
         }
+    }
+
+    private bool ValidTest(){
+        float highestValue = Mathf.NegativeInfinity;
+
+        if(Mathf.Abs(accelerationsList[5].X) > highestValue)
+            highestValue = Mathf.Abs(accelerationsList[5].X);
+        if(Mathf.Abs(accelerationsList[5].Y) > highestValue)
+            highestValue = Mathf.Abs(accelerationsList[5].Y);
+        if(Mathf.Abs(accelerationsList[5].Z) > highestValue)
+            highestValue = Mathf.Abs(accelerationsList[5].Z);
+
+        // print(highestValue);
+
+        return highestValue > 13;
     }
 }
