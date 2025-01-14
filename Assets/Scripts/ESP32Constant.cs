@@ -6,35 +6,31 @@ public class ESP32Constant : MonoBehaviour
 {
     TcpClient client;
     NetworkStream stream;
-    // string ipAddress = "10.36.226.24"; // Replace with your ESP32's IP address
     string ipAddress = "192.168.68.118"; // Replace with your ESP32's IP address
     int port = 80;
-    float timer = 0;
     private AccelerometerData accelerometerData;
+
+    public float timeSinceLastCommunication = 0;
+    private bool connecting = false;
 
     void Start()
     {
         accelerometerData = GetComponent<AccelerometerData>();
-        try
-        {
-            client = new TcpClient(ipAddress, port);
-            stream = client.GetStream();
-            Debug.Log("Connected to ESP32");
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Connection error: " + e.Message);
-        }
+        ConnectToArduino();
     }
 
     private string buffer = "";
     void Update()
     {
-        // timer += Time.deltaTime;
-        if (stream != null && stream.CanWrite && timer >= 0.1f)
+        timeSinceLastCommunication += Time.deltaTime;
+        // if(timeSinceLastCommunication >= 1){
+        //     ConnectToArduino();
+        //     return;
+        // }
+
+        if (stream != null && stream.CanWrite)
         {
-            // timer = 0;
-            string message = "Hello, ESP32!";
+            string message = "Connected to Unity";
             byte[] data = Encoding.ASCII.GetBytes(message + "\n");
             stream.Write(data, 0, data.Length);
         }
@@ -51,6 +47,7 @@ public class ESP32Constant : MonoBehaviour
                 string message = buffer.Substring(0, newlineIndex).Trim(); // Extract one message
                 buffer = buffer.Substring(newlineIndex + 1); // Remove processed message from the buffer
 
+                timeSinceLastCommunication = 0;
                 ParseData(message);
             }
         }
@@ -81,6 +78,25 @@ public class ESP32Constant : MonoBehaviour
         {
             byte[] data = Encoding.ASCII.GetBytes(message + "\n");
             stream.Write(data, 0, data.Length);
+        }
+    }
+
+    void ConnectToArduino(){
+        print("Connecting to Arduino");
+        if(connecting)
+            return;
+
+        connecting = true;
+        try
+        {
+            client = new TcpClient(ipAddress, port);
+            stream = client.GetStream();
+            connecting = false;
+            Debug.Log("Connected to ESP32");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Connection error: " + e.Message);
         }
     }
     

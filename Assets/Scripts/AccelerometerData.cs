@@ -27,6 +27,7 @@ public class Accelerations{
 
 public class AccelerometerData : MonoBehaviour
 {
+    public bool liveRecording;
     public string flaskIP = "http://127.0.0.1:5000/";
     public Accelerations currentAccelerometer;
     public List<Accelerations> accelerationsList;
@@ -56,7 +57,7 @@ public class AccelerometerData : MonoBehaviour
         flaskTimer += Time.deltaTime;
         postCooldown += Time.deltaTime;
         
-        if(flaskTimer >= flaskInterval && postCooldown >= postInterval){
+        if(flaskTimer >= flaskInterval && postCooldown >= postInterval && liveRecording){
             canPost = true;
             flaskTimer = 0;
             StartCoroutine(FlaskPost());
@@ -167,6 +168,7 @@ public class AccelerometerData : MonoBehaviour
     }
 
     public IEnumerator FlaskPost(){
+
         string data = "";
         for(int i = 0; i < accelerationsList.Count; i++){
             if(i < accelerationsList.Count-1)
@@ -198,13 +200,14 @@ public class AccelerometerData : MonoBehaviour
 
     private bool ValidTest(){
         float highestValue = Mathf.NegativeInfinity;
+        Accelerations accel = accelerationsList[accelerationsList.Count-4];
 
-        if(Mathf.Abs(accelerationsList[5].X) > highestValue)
-            highestValue = Mathf.Abs(accelerationsList[5].X);
-        if(Mathf.Abs(accelerationsList[5].Y) > highestValue)
-            highestValue = Mathf.Abs(accelerationsList[5].Y);
-        if(Mathf.Abs(accelerationsList[5].Z) > highestValue)
-            highestValue = Mathf.Abs(accelerationsList[5].Z);
+        if(Mathf.Abs(accel.X) > highestValue)
+            highestValue = Mathf.Abs(accel.X);
+        if(Mathf.Abs(accel.Y) > highestValue)
+            highestValue = Mathf.Abs(accel.Y);
+        if(Mathf.Abs(accel.Z) > highestValue)
+            highestValue = Mathf.Abs(accel.Z);
 
         // print(highestValue);
 
