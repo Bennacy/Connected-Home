@@ -54,8 +54,13 @@ public class AccelerometerData : MonoBehaviour
 
     void Update()
     {
-        if(!liveTesting)
+        // If the program has already been run, so as to not override the toggle in the ESP32Constant script
+        if(Input.GetKeyDown(KeyCode.O) && accelerationsList.Count > 1){
+            liveTesting = !liveTesting;
+        }
+        if(!liveTesting){
             return;
+        }
         
         flaskCooldown += Time.deltaTime;
         postCooldown += Time.deltaTime;
