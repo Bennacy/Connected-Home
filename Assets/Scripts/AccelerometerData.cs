@@ -27,19 +27,19 @@ public class Accelerations{
 
 public class AccelerometerData : MonoBehaviour
 {
-    public bool liveRecording;
-    public string flaskIP = "http://127.0.0.1:5000/";
-    public Accelerations currentAccelerometer;
-    public List<Accelerations> accelerationsList;
-    public int maxListSize = 15;
-    string trainFileName = "";
-    string predictFileName = "";
+    public bool liveTesting = false;
+    [SerializeField] private string flaskIP = "http://127.0.0.1:5000/";
+    //! Essentially works as a stack, once it has reached a specific size new values push out the oldest ones
+    [SerializeField] private List<Accelerations> accelerationsList;
+    [SerializeField] private int maxListSize = 10;
+    private string trainFileName = "";
+    private string predictFileName = "";
     private PlayerController playerController;
 
-    public float flaskInterval = 0.5f;
-    private float flaskTimer = 0;
-    public bool canPost = true;
-    public float postInterval = 2;
+    [SerializeField] private float flaskInterval = 0.5f;
+    private float flaskCooldown = 0;
+    //! Allows the user to move their arm back to a more normal position before testing for new gestures
+    [SerializeField] private float postInterval = 2;
     private float postCooldown;
 
     void Start()
@@ -49,47 +49,49 @@ public class AccelerometerData : MonoBehaviour
         trainFileName = Application.dataPath + "/train.csv";
         predictFileName = Application.dataPath + "/predict.csv";
         postCooldown = postInterval;
-        flaskTimer = flaskInterval;
+        flaskCooldown = flaskInterval;
     }
 
     void Update()
     {
-        flaskTimer += Time.deltaTime;
+        if(!liveTesting)
+            return;
+        
+        flaskCooldown += Time.deltaTime;
         postCooldown += Time.deltaTime;
         
-        if(flaskTimer >= flaskInterval && postCooldown >= postInterval && liveRecording){
-            canPost = true;
-            flaskTimer = 0;
+        if(flaskCooldown >= flaskInterval && postCooldown >= postInterval){
+            flaskCooldown = 0;
             StartCoroutine(FlaskPost());
         }
-        
-        if(Input.GetKeyDown(KeyCode.UpArrow)){
-            StartCoroutine(WriteTrainCSV("UP"));
-        }
-        if(Input.GetKeyDown(KeyCode.DownArrow)){
-            StartCoroutine(WriteTrainCSV("DOWN"));
-        }
-        if(Input.GetKeyDown(KeyCode.LeftArrow)){
-            StartCoroutine(WriteTrainCSV("LEFT"));
-        }
-        if(Input.GetKeyDown(KeyCode.RightArrow)){
-            StartCoroutine(WriteTrainCSV("RIGHT"));
-        }
 
-        if(Input.GetKeyDown(KeyCode.N)){
-            StartCoroutine(WriteTrainCSV("NONE"));
-        }
+        //! Not needed anymore, here for reference
+        //! Controls used while recording/testing data for the machine learning algorithm
+        // if(Input.GetKeyDown(KeyCode.UpArrow)){
+        //     StartCoroutine(WriteTrainCSV("UP"));
+        // }
+        // if(Input.GetKeyDown(KeyCode.DownArrow)){
+        //     StartCoroutine(WriteTrainCSV("DOWN"));
+        // }
+        // if(Input.GetKeyDown(KeyCode.LeftArrow)){
+        //     StartCoroutine(WriteTrainCSV("LEFT"));
+        // }
+        // if(Input.GetKeyDown(KeyCode.RightArrow)){
+        //     StartCoroutine(WriteTrainCSV("RIGHT"));
+        // }
+        // if(Input.GetKeyDown(KeyCode.N)){
+        //     StartCoroutine(WriteTrainCSV("NONE"));
+        // }
+        // if(Input.GetKeyDown(KeyCode.Space)){
+        //     StartCoroutine(WritePredictCSV());
+        // }
 
-        if(Input.GetKeyDown(KeyCode.Space)){
-            StartCoroutine(WritePredictCSV());
-        }
-
-        if(Input.GetKeyDown(KeyCode.R)){
-            ResetCSV(predictFileName); // Reset prediction file
-        }
-        if(Input.GetKeyDown(KeyCode.T)){
-            ResetCSV(trainFileName); // Reset training file
-        }
+        // if(Input.GetKeyDown(KeyCode.R)){
+        //     ResetCSV(predictFileName); // Reset prediction file
+        // }
+        // if(Input.GetKeyDown(KeyCode.T)){
+        //     ResetCSV(trainFileName); // Reset training file
+        // }
     }
 
     private void ReceiveCommand(string command){
@@ -152,14 +154,7 @@ public class AccelerometerData : MonoBehaviour
         yield return new WaitForSeconds(1);
         if(accelerationsList.Count > 0){
             TextWriter tw = new StreamWriter(predictFileName, true);
-            string data = "";
-
-            for(int i = 0; i < accelerationsList.Count; i++){
-                if(i < accelerationsList.Count-1)
-                    data +=  $"{accelerationsList[i].X}, {accelerationsList[i].Y}, {accelerationsList[i].Z}, ";
-                else
-                    data +=  $"{accelerationsList[i].X}, {accelerationsList[i].Y}, {accelerationsList[i].Z}";
-            }
+            string data = TranslateData();
             
             tw.WriteLine(data);
             tw.Close();
@@ -168,15 +163,7 @@ public class AccelerometerData : MonoBehaviour
     }
 
     public IEnumerator FlaskPost(){
-
-        string data = "";
-        for(int i = 0; i < accelerationsList.Count; i++){
-            if(i < accelerationsList.Count-1)
-                data +=  $"{accelerationsList[i].X}, {accelerationsList[i].Y}, {accelerationsList[i].Z}, ";
-            else
-                data +=  $"{accelerationsList[i].X}, {accelerationsList[i].Y}, {accelerationsList[i].Z}";
-        }
-
+        string data = TranslateData();
         string features = "{\"features\":[";
         features += data;
         features += "]}";
@@ -185,11 +172,9 @@ public class AccelerometerData : MonoBehaviour
             if(webRequest.result == UnityWebRequest.Result.Success){
                 string response = webRequest.downloadHandler.text;
 
-                if(!response.Contains("NONE") && ValidTest()){
+                if(!response.Contains("NONE") && ValidTest(response)){
                     ReceiveCommand(response);
-                    canPost = false;
                     postCooldown = 0;
-                    // lastResponse = "";
                 }
             }
             if(webRequest.result == UnityWebRequest.Result.ConnectionError){
@@ -198,8 +183,22 @@ public class AccelerometerData : MonoBehaviour
         }
     }
 
-    private bool ValidTest(){
+    private string TranslateData(){
+        string data = "";
+
+        for(int i = 0; i < accelerationsList.Count; i++){
+            if(i < accelerationsList.Count-1)
+                data +=  $"{accelerationsList[i].X}, {accelerationsList[i].Y}, {accelerationsList[i].Z}, ";
+            else
+                data +=  $"{accelerationsList[i].X}, {accelerationsList[i].Y}, {accelerationsList[i].Z}";
+        }
+
+        return data;
+    }
+
+    private bool ValidTest(string response){
         float highestValue = Mathf.NegativeInfinity;
+        //! Not using the most recent value, as that could trigger a response before the full movement is completed
         Accelerations accel = accelerationsList[accelerationsList.Count-4];
 
         if(Mathf.Abs(accel.X) > highestValue)
@@ -209,8 +208,8 @@ public class AccelerometerData : MonoBehaviour
         if(Mathf.Abs(accel.Z) > highestValue)
             highestValue = Mathf.Abs(accel.Z);
 
-        // print(highestValue);
-
+        //! Testing if the strongest force being applied exceeds a threshold, to help with sensitivity
         return highestValue > 13;
+        // return highestValue > (response.Contains("LEFT") || response.Contains("RIGHT") ? 12 : 13);
     }
 }

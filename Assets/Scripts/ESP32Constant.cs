@@ -1,32 +1,44 @@
+using System.Collections;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
 
 public class ESP32Constant : MonoBehaviour
 {
-    TcpClient client;
-    NetworkStream stream;
-    string ipAddress = "192.168.68.118"; // Replace with your ESP32's IP address
-    int port = 80;
+    private TcpClient client;
+    private NetworkStream stream;
+    private string ipAddress = "192.168.68.118";
+    private int port = 80;
     private AccelerometerData accelerometerData;
+    private string buffer = "";
 
-    public float timeSinceLastCommunication = 0;
-    private bool connecting = false;
+    [SerializeField] private bool connected = false;
+
+    [SerializeField]private float timeSinceLastCommunication = 0;
+
+    [SerializeField]private GameObject successMessage;
+    [SerializeField]private GameObject failMessage;
 
     void Start()
     {
         accelerometerData = GetComponent<AccelerometerData>();
-        ConnectToArduino();
+        // ConnectToArduino();
     }
 
-    private string buffer = "";
     void Update()
     {
+        if(!connected){
+            if(Input.GetKey(KeyCode.C)){
+                ConnectToArduino();
+            }
+            return;
+        }
+
+        if(timeSinceLastCommunication > 2){
+            StartCoroutine(ShowScreenMessage(failMessage, 10));
+        }
+
         timeSinceLastCommunication += Time.deltaTime;
-        // if(timeSinceLastCommunication >= 1){
-        //     ConnectToArduino();
-        //     return;
-        // }
 
         if (stream != null && stream.CanWrite)
         {
@@ -44,8 +56,10 @@ public class ESP32Constant : MonoBehaviour
             while (buffer.Contains("\n"))
             {
                 int newlineIndex = buffer.IndexOf('\n');
-                string message = buffer.Substring(0, newlineIndex).Trim(); // Extract one message
-                buffer = buffer.Substring(newlineIndex + 1); // Remove processed message from the buffer
+                //! Extract one message
+                string message = buffer.Substring(0, newlineIndex).Trim();
+                //! Remove processed message from the buffer
+                buffer = buffer.Substring(newlineIndex + 1);
 
                 timeSinceLastCommunication = 0;
                 ParseData(message);
@@ -71,7 +85,6 @@ public class ESP32Constant : MonoBehaviour
         }
     }
     
-
     void SendData(string message)
     {
         if (stream != null && stream.CanWrite)
@@ -83,27 +96,32 @@ public class ESP32Constant : MonoBehaviour
 
     void ConnectToArduino(){
         print("Connecting to Arduino");
-        if(connecting)
-            return;
-
-        connecting = true;
         try
         {
             client = new TcpClient(ipAddress, port);
             stream = client.GetStream();
-            connecting = false;
+            connected = true;
+            accelerometerData.liveTesting = true;
             Debug.Log("Connected to ESP32");
+            StartCoroutine(ShowScreenMessage(successMessage));
         }
         catch (System.Exception e)
         {
             Debug.LogError("Connection error: " + e.Message);
+            StartCoroutine(ShowScreenMessage(failMessage));
         }
     }
-    
 
     void OnApplicationQuit()
     {
         if (stream != null) stream.Close();
         if (client != null) client.Close();
+    }
+
+    private IEnumerator ShowScreenMessage(GameObject message, int time = 2)
+    {
+        message.SetActive(true);
+        yield return new WaitForSeconds(time);
+        message.SetActive(false);
     }
 }

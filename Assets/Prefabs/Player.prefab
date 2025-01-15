@@ -123,7 +123,6 @@ GameObject:
   - component: {fileID: 4297944180829219293}
   - component: {fileID: 756667950843107892}
   - component: {fileID: 8447936042734308405}
-  - component: {fileID: 1933969058505758441}
   - component: {fileID: 6589898069209425039}
   - component: {fileID: 5334242647764702592}
   m_Layer: 3
@@ -224,6 +223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f8f1aba68d5fb3468789a1cff6dd7cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  liveRecording: 1
   flaskIP: http://127.0.0.1:5000/
   currentAccelerometer:
     X: 0
@@ -255,20 +255,6 @@ MonoBehaviour:
   currentDivision: {fileID: 0}
   walkSpeed: 2
   moveSpeed: 0
---- !u!114 &1933969058505758441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6430464662109381228}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c4ad5b90d4389c4bba209d503960763, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxListSize: 15
-  requestDelay: 1
 --- !u!54 &6589898069209425039
 Rigidbody:
   m_ObjectHideFlags: 0

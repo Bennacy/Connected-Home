@@ -1,7 +1,7 @@
+#if UNITY_EDITOR
+
 using UnityEngine;
 using UnityEditor;
-using System.Collections;
-
 [CustomEditor(typeof(AddMeshCollider))] 
 public class AddMeshColliderEditor : Editor {
 
@@ -19,3 +19,4 @@ public class AddMeshColliderEditor : Editor {
     }
 
 }
+#endif

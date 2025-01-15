@@ -9,25 +9,22 @@ public class PlayerController : MonoBehaviour
 {
 
     [Header("Camera")]
-    public CameraController cameraController;
-    public Transform cameraHolder;
+    [SerializeField] private CameraController cameraController;
+    [SerializeField] private Transform cameraHolder;
     private Vector2 moveDirection;
-    public Camera cam;
-    public Vector2 cameraVerticalBounds = new Vector2(80, -80);
+    [SerializeField] private Camera cam;
+    [SerializeField] private Vector2 cameraVerticalBounds = new Vector2(80, -80);
     private Vector2 cameraRotate;
     private float currCameraAngle;
     [Space(10)]
 
     [Header("Lights")]
-    [SerializeField] private GameObject[] MainLights;
-    [SerializeField] private GameObject[] SecondaryLights;
     [SerializeField] private LightZone currentDivision;
-    private bool changingSecondary = false;
+    // private bool changingSecondary = false;
     [Space(10)]
 
     [Header("Movement")]
-    public float walkSpeed;
-    public float moveSpeed;
+    [SerializeField] private float walkSpeed;
     private Rigidbody rb;
     
     void Start()
@@ -40,10 +37,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1) && currentDivision != null){
-            currentDivision.ToggleLights(changingSecondary);
-            changingSecondary = false;
-        }
+        //! Not needed anymore, here for reference
+        //! Controls used while implementing the light zones
+        // if(Input.GetKeyDown(KeyCode.Alpha1) && currentDivision != null){
+        //     currentDivision.ToggleLights(changingSecondary);
+        //     changingSecondary = false;
+        // }
         // if(Input.GetKeyDown(KeyCode.Alpha2) && currentDivision != null){
         //     currentDivision.UpdateLightColor(changingSecondary);
         //     changingSecondary = false;
@@ -52,9 +51,12 @@ public class PlayerController : MonoBehaviour
         //     currentDivision.UpdateLightIntensity(changingSecondary);
         //     changingSecondary = false;
         // }
-        if(Input.GetKeyDown(KeyCode.F) && currentDivision != null){
-            changingSecondary = !changingSecondary;
-        }
+        // if(Input.GetKeyDown(KeyCode.F) && currentDivision != null){
+        //     changingSecondary = !changingSecondary;
+        // }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
     }
 
     void FixedUpdate()
