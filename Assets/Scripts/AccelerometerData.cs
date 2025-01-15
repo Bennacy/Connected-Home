@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.Networking;
 using System;
+using Unity.VisualScripting;
 
 
 [System.Serializable]
@@ -42,6 +43,8 @@ public class AccelerometerData : MonoBehaviour
     [SerializeField] private float postInterval = 2;
     private float postCooldown;
 
+    [SerializeField] private GameObject controllerText;
+
     void Start()
     {
         playerController = GetComponent<PlayerController>();
@@ -57,6 +60,7 @@ public class AccelerometerData : MonoBehaviour
         // If the program has already been run, so as to not override the toggle in the ESP32Constant script
         if(Input.GetKeyDown(KeyCode.O) && accelerationsList.Count > 1){
             liveTesting = !liveTesting;
+            controllerText.SetActive(!liveTesting);
         }
         if(!liveTesting){
             return;
