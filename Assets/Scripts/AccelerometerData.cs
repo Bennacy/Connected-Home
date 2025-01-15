@@ -57,11 +57,11 @@ public class AccelerometerData : MonoBehaviour
 
     void Update()
     {
-        // If the program has already been run, so as to not override the toggle in the ESP32Constant script
-        if(Input.GetKeyDown(KeyCode.O) && accelerationsList.Count > 1){
-            liveTesting = !liveTesting;
-            controllerText.SetActive(!liveTesting);
-        }
+        //! If the program has already been run, so as to not override the toggle in the ESP32Constant script
+        // if(Input.GetKeyDown(KeyCode.O) && accelerationsList.Count > 1){
+        //     liveTesting = !liveTesting;
+        //     controllerText.SetActive(!liveTesting);
+        // }
         if(!liveTesting){
             return;
         }

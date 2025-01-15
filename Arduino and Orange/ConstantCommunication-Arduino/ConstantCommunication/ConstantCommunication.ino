@@ -5,8 +5,6 @@
 
 const char* ssid = "Visitors";
 const char* password = "";
-const char* ssid = "Home_Net DECO";
-const char* password = "2018_aoACASOzonnet1966#";
 
 Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 WiFiServer server(80);
@@ -26,7 +24,7 @@ void setup() {
     // IPAddress primaryDNS(208, 67, 222, 222);
     // IPAddress secondaryDNS(208, 67, 220, 220);
 
-    WiFi.config(local_IP, gateway);
+    // WiFi.config(local_IP, gateway);
     WiFi.setMinSecurity(WIFI_AUTH_OPEN);
     WiFi.begin(ssid, password);
 

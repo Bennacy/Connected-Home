@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Lights")]
     [SerializeField] private LightZone currentDivision;
-    // private bool changingSecondary = false;
+    private bool changingSecondary = false;
     [Space(10)]
 
     [Header("Movement")]
@@ -37,20 +37,20 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //! Not needed anymore, here for reference
+        //! Not needed anymore, here for reference and in case of emergency
         //! Controls used while implementing the light zones
-        // if(Input.GetKeyDown(KeyCode.Alpha1) && currentDivision != null){
-        //     currentDivision.ToggleLights(changingSecondary);
-        //     changingSecondary = false;
-        // }
-        // if(Input.GetKeyDown(KeyCode.Alpha2) && currentDivision != null){
-        //     currentDivision.UpdateLightColor(changingSecondary);
-        //     changingSecondary = false;
-        // }
-        // if(Input.GetKeyDown(KeyCode.Alpha3) && currentDivision != null){
-        //     currentDivision.UpdateLightIntensity(changingSecondary);
-        //     changingSecondary = false;
-        // }
+        if(Input.GetKeyDown(KeyCode.Alpha1) && currentDivision != null){
+            currentDivision.ToggleLights(changingSecondary);
+            changingSecondary = false;
+        }
+        if(Input.GetKeyDown(KeyCode.Alpha2) && currentDivision != null){
+            currentDivision.UpdateLightColor(changingSecondary, 1);
+            changingSecondary = false;
+        }
+        if(Input.GetKeyDown(KeyCode.Alpha3) && currentDivision != null){
+            currentDivision.UpdateLightIntensity(changingSecondary);
+            changingSecondary = false;
+        }
         // if(Input.GetKeyDown(KeyCode.F) && currentDivision != null){
         //     changingSecondary = !changingSecondary;
         // }

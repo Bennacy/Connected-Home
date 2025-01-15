@@ -210,7 +210,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b68e925f3de7f34caa342145c684a39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  connected: 0
   timeSinceLastCommunication: 0
+  successMessage: {fileID: 0}
+  failMessage: {fileID: 0}
+  disconnectMessage: {fileID: 0}
 --- !u!114 &756667950843107892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,17 +227,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f8f1aba68d5fb3468789a1cff6dd7cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  liveRecording: 1
+  liveTesting: 0
   flaskIP: http://127.0.0.1:5000/
-  currentAccelerometer:
-    X: 0
-    Y: 0
-    Z: 0
   accelerationsList: []
   maxListSize: 10
   flaskInterval: 0.1
-  canPost: 1
   postInterval: 1
+  controllerText: {fileID: 0}
 --- !u!114 &8447936042734308405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,11 +250,8 @@ MonoBehaviour:
   cameraHolder: {fileID: 1339015362474808534}
   cam: {fileID: 5057215093343159907}
   cameraVerticalBounds: {x: -60, y: 60}
-  MainLights: []
-  SecondaryLights: []
   currentDivision: {fileID: 0}
   walkSpeed: 2
-  moveSpeed: 0
 --- !u!54 &6589898069209425039
 Rigidbody:
   m_ObjectHideFlags: 0

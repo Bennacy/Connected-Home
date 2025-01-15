@@ -7,7 +7,8 @@ public class ESP32Constant : MonoBehaviour
 {
     private TcpClient client;
     private NetworkStream stream;
-    private string ipAddress = "192.168.68.118";
+    // private string ipAddress = "192.168.68.118"; //! IP when testing at  home
+    private string ipAddress = "10.36.228.171"; //! IP when testing at  IADE
     private int port = 80;
     private AccelerometerData accelerometerData;
     private string buffer = "";
@@ -18,21 +19,24 @@ public class ESP32Constant : MonoBehaviour
 
     [SerializeField]private GameObject successMessage;
     [SerializeField]private GameObject failMessage;
+    [SerializeField]private GameObject disconnectMessage;
 
     void Start()
     {
         accelerometerData = GetComponent<AccelerometerData>();
-        // ConnectToArduino();
     }
 
     void Update()
     {
-        if(!connected){
-            if(Input.GetKey(KeyCode.C)){
+        if(Input.GetKeyDown(KeyCode.C)){
+            if(!connected)
                 ConnectToArduino();
-            }
-            return;
+            else
+                Disconnect();
         }
+
+        if(!connected)
+            return;
 
         if(timeSinceLastCommunication > 2){
             StartCoroutine(ShowScreenMessage(failMessage, 10));
@@ -112,10 +116,17 @@ public class ESP32Constant : MonoBehaviour
         }
     }
 
-    void OnApplicationQuit()
-    {
+    void Disconnect(){
+        connected = false;
         if (stream != null) stream.Close();
         if (client != null) client.Close();
+        accelerometerData.liveTesting = false;
+        StartCoroutine(ShowScreenMessage(disconnectMessage));
+    }
+
+    void OnApplicationQuit()
+    {
+        Disconnect();
     }
 
     private IEnumerator ShowScreenMessage(GameObject message, int time = 2)
